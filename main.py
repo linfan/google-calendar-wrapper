@@ -22,7 +22,9 @@ import oauth
 
 app = webapp2.WSGIApplication(
     [
-     ('/', api.MainHandler),
-     (oauth.decorator.callback_path, oauth.decorator.callback_handler()),
+        ('/', api.MainHandler),
+        ('/login', api.LoginHandler),
+        ('/event/list', api.EventListHanlder),
+        (oauth.decorator.callback_path, oauth.decorator.callback_handler()),
     ],
     debug=True)
