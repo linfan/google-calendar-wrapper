@@ -1,16 +1,10 @@
 #!/usr/bin/env python
 
 import httplib2
-import logging
-import os
+import webapp2
 
 from apiclient import discovery
-from oauth2client import appengine
-from oauth2client import client
 from google.appengine.api import memcache
-
-import webapp2
-import jinja2
 
 import oauth
 
@@ -25,5 +19,5 @@ class MainHandler(webapp2.RequestHandler):
         'url': oauth.decorator.authorize_url(),
         'has_credentials': oauth.decorator.has_credentials()
         }
-    template = JINJA_ENVIRONMENT.get_template('main.html')
+    template = oauth.JINJA_ENVIRONMENT.get_template('main.html')
     self.response.write(template.render(variables))
