@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+import os
+import json
+
 import httplib2
 import webapp2
 import jinja2
@@ -21,7 +24,7 @@ class MainHandler(webapp2.RequestHandler):
         'url': oauth.decorator.authorize_url(),
         'has_credentials': oauth.decorator.has_credentials()
         }
-    template = oauth.JINJA_ENVIRONMENT.get_template('main.html')
+    template = JINJA_ENVIRONMENT.get_template('main.html')
     self.response.write(template.render(variables))
 
 class LoginHandler(webapp2.RequestHandler):
@@ -30,7 +33,8 @@ class LoginHandler(webapp2.RequestHandler):
     if oauth.decorator.has_credentials():
         self.response.write('{<br>status: ok<br>}')
     else:
-        self.response.write('{<br>url: ' + oauth.decorator.authorize_url() + '<br>}')
+    print('Authorize_url: ' + oauth.decorator.authorize_url())
+    self.response.write('{<br>url: ' + oauth.decorator.authorize_url() + '<br>}')
 
 class EventListHanlder(webapp2.RequestHandler):
     def get(self):
