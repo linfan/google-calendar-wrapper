@@ -1,5 +1,6 @@
 # user files
 material/*
+cmd/*
 client_secrets.json
 .DS_Store
 
