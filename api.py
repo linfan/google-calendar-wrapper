@@ -2,11 +2,13 @@
 import os
 import json
 
+import logging
 import httplib2
 import webapp2
 import jinja2
 from apiclient import discovery
 from google.appengine.api import memcache
+from google.appengine.api import users
 
 import oauth
 
@@ -27,14 +29,26 @@ class MainHandler(webapp2.RequestHandler):
     template = JINJA_ENVIRONMENT.get_template('main.html')
     self.response.write(template.render(variables))
 
-class LoginHandler(webapp2.RequestHandler):
-  @oauth.decorator.oauth_aware
+class LoginRedirectHandler(webapp2.RequestHandler):
+#  @oauth.decorator.oauth_aware
   def get(self):
-    if oauth.decorator.has_credentials():
-        self.response.write('{<br>status: ok<br>}')
+#    if oauth.decorator.has_credentials():
+#        self.response.write('{<br>status: ok<br>}')
+#    else:
+#        logging.debug('>> Authorize URL: ' + oauth.decorator.authorize_url())
+#        self.response.write('{<br>url: ' + oauth.decorator.authorize_url() + '<br>}')
+    user = users.get_current_user()
+    if user:
+        greeting = ('Welcome, %s! (<a href="%s">sign out</a>)' % (user.nickname(), users.create_logout_url('/')))
     else:
-    print('Authorize_url: ' + oauth.decorator.authorize_url())
-    self.response.write('{<br>url: ' + oauth.decorator.authorize_url() + '<br>}')
+        greeting = ('<a href="%s">Sign in or register</a>.' % users.create_login_url('/'))
+    self.response.out.write('<html><body>%s</body></html>' % greeting)
+
+class LoginHandler(webapp2.RequestHandler):
+    def get(self):
+        user = users.User("linfan.china@gmail.com")
+        logging.debug('>> Auto-login..')
+        self.redirect('/login_redirect')
 
 class EventListHanlder(webapp2.RequestHandler):
     def get(self):
