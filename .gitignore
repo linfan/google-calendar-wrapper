@@ -6,6 +6,7 @@ client_secrets.json
 
 # generated files
 *.pyc
+*.dat
 .idea/*
 
 # google-api-python-client-gae-library

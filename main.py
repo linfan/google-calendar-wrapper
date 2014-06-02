@@ -24,8 +24,9 @@ app = webapp2.WSGIApplication(
     [
         ('/', api.MainHandler),
         ('/login', api.LoginHandler),
-        ('/login_redirect', api.LoginRedirectHandler),
+        ('/oauth2callback', api.OAuthCallbackHandler),
         ('/event/list', api.EventListHanlder),
-        (oauth.decorator.callback_path, oauth.decorator.callback_handler()),
+        # (oauth.decorator.callback_path, oauth.decorator.callback_handler()),
     ],
     debug=True)
+
