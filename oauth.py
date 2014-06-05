@@ -2,10 +2,9 @@ import os
 import json
 import logging
 
-from oauth2client import appengine
-from oauth2client.client import AccessTokenRefreshError
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
+from bottle import redirect
 
 class OAuthHandler:
 
@@ -37,11 +36,10 @@ class OAuthHandler:
         """Respond to the current request by redirecting to the auth server."""
         uri = self.flow.step1_get_authorize_url()
 
-        logging.debug('>> Redirecting to %s' % uri)
-        response.status_int = 301
-        response.headers.add('Cache-Control', 'no-cache')
-        response.headers.add('Location', uri)
+        print('>> Redirecting to %s' % uri)
         response.set_cookie('user_id', user_id)
+        response.set_header('Cache-Control', 'no-cache')
+        redirect(uri, 301)
 
     def save_credentials(self, user_id, credentials):
         """Using the fake user name as a key, save the credentials."""
@@ -51,6 +49,8 @@ class OAuthHandler:
 
     def respond_save_credential(self, user_id, code):
         """Respond to the return code of first step OAuth authorisation"""
+        print('>> STEP begin')
         credentials = self.flow.step2_exchange(code)
+        print('>> STEP done')
         self.save_credentials(user_id, credentials)
 
