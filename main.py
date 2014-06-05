@@ -1,6 +1,18 @@
 #!/usr/bin/env python
 
+import re
+import sys, os
 from bottle import run
-import api
+from oauth import OAuthHandler
 
-run(host='localhost', port=9999, debug=True)
+sys.path.append(os.sep.join((os.getcwd(),'handler')))
+import root
+import login
+import event
+
+client_info = OAuthHandler.ins().get_client_info()
+hostname = re.match('http[s]?://([^:/]+)[:/].*', client_info['redirect_uris'][0]).group(1)
+if hostname:
+    run(host=hostname, port=9999, debug=True)
+else:
+    print(">> ERROR: client_secrets.json file incorrect!")

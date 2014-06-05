@@ -1,7 +1,6 @@
 import os
 import json
 import logging
-
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
 from bottle import redirect
