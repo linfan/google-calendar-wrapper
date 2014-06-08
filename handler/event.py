@@ -11,7 +11,6 @@ from utility import Utility
 
 def get_calendar_data(credentials):
     """Given the credentials, returns calendar data."""
-    output = StringIO.StringIO()
     http = httplib2.Http()
     http = credentials.authorize(http)
     service = build('calendar', 'v3', http=http)
@@ -19,16 +18,18 @@ def get_calendar_data(credentials):
     print('>> Min-time: %s' % min_time)
     http_request = service.events().list(calendarId='primary', timeMin=min_time, orderBy="startTime", singleEvents=True)
 
+    res = { 'status': 'OK', 'events': [] }
     while http_request is not None:
         http_response = http_request.execute()
         for event in http_response.get('items', []):
-            output.write(repr(event['start']) + '\n')
-            output.write(repr(event['summary']) + '\n')
-            print event['start']
-            print event['summary']
+            item = {
+                    'start': event['start'],
+                    'summary': event['summary']
+                }
+            res['events'].append(item)
         http_request = service.events().list_next(http_request, http_response)
 
-    return output.getvalue()
+    return res
 
 @route('/event/list')
 def event_list_handler():
