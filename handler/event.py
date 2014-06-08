@@ -6,6 +6,7 @@ from oauth2client.client import AccessTokenRefreshError
 from apiclient.discovery import build
 from oauth import OAuthHandler
 from datetime import datetime
+from utility import Utility
 
 def get_calendar_data(credentials):
     """Given the credentials, returns calendar data."""
@@ -29,10 +30,9 @@ def event_list_handler():
     if credentials is None or credentials.invalid:
         response.content_type = 'text/plain'
         return '''{
-        status: ERROR,
-        detail: Credential expired, please re-login
-}'''
-        # OAuthHandler.ins().respond_redirect_to_auth_server(response, user_id)
+    status: ERROR,
+    detail: User id not exist, URL should look like: http://%s:9999/event/list?user=123
+}''' % Utility.ins().hostname()
     try:
         calendar_output = get_calendar_data(credentials)
         response.set_header('Cache-Control', 'no-cache')
@@ -41,7 +41,6 @@ def event_list_handler():
     except AccessTokenRefreshError:
         response.content_type = 'text/plain'
         return '''{
-        status: ERROR,
-        detail: Credential expired, please re-login
+    status: ERROR,
+    detail: Credential expired, please re-login
 }'''
-        # OAuthHandler.ins().respond_redirect_to_auth_server(response, user_id)
