@@ -1,6 +1,7 @@
 import json
 import StringIO
 import httplib2
+import re
 from bottle import route, request, response
 from oauth2client.client import AccessTokenRefreshError
 from apiclient.discovery import build
@@ -13,13 +14,32 @@ def get_calendar_data(credentials):
     http = httplib2.Http()
     http = credentials.authorize(http)
     service = build('calendar', 'v3', http=http)
-    min_time = datetime.isoformat(datetime.now())
-    http_request = service.events().list(calendarId='primary', orderBy='startTime', timeMin=min_time)
+    min_time = re.sub(r'\.[0-9]*$', '+08:00', datetime.isoformat(datetime.now()))
+    print('>> Min-time: %s' % min_time)
+    http_request = service.events().list(calendarId='primary', timeMin=min_time, orderBy="startTime", singleEvents=True)
+
+#    page_token = None
+#    while True:
+#        events = service.events().list(calendarId='primary', pageToken=page_token).execute()
+#        for event in events['items']:
+#            output.write(repr(event['start']) + '\n')
+#            output.write(repr(event['summary']) + '\n')
+#            print event['start']
+#            print event['summary']
+#            #print event
+#        page_token = events.get('nextPageToken')
+#        if not page_token:
+#            break
+
     while http_request is not None:
         http_response = http_request.execute()
         for event in http_response.get('items', []):
-            output.write(repr(event.get('summary', 'NO SUMMARY')) + '\n')
+            output.write(repr(event['start']) + '\n')
+            output.write(repr(event['summary']) + '\n')
+            print event['start']
+            print event['summary']
         http_request = service.events().list_next(http_request, http_response)
+
     return output.getvalue()
 
 @route('/event/list')
