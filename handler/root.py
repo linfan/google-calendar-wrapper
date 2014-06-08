@@ -1,5 +1,11 @@
 from bottle import route, request, response
+from utility import Utility
 
 @route('/')
 def main_handler():
-    return '{<br>status: OK<br>detail: nothing to show on this URL<br>}'
+    response.content_type = 'text/plain'
+    return '''{
+    status: OK,
+    detail: Nothing to show on this page, try http://%s:9999/login
+}
+''' % Utility.ins().hostname()

@@ -5,6 +5,7 @@ from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
 from bottle import redirect
 
+
 class OAuthHandler:
 
     def __init__(self):
@@ -43,13 +44,13 @@ class OAuthHandler:
     def save_credentials(self, user_id, credentials):
         """Using the fake user name as a key, save the credentials."""
         storage = Storage('credentials-%s.dat' % (user_id))
-        logging.debug('>> Credentials: %s' % credentials)
         storage.put(credentials)
 
-    def respond_save_credential(self, user_id, code):
+    def respond_save_credential(self, code):
         """Respond to the return code of first step OAuth authorisation"""
-        print('>> STEP begin')
+        user_id = request.get_cookie('user_id')
+        print('>> User ID from cookie: %s' % user_id)
         credentials = self.flow.step2_exchange(code)
-        print('>> STEP done')
+        logging.debug('>> Credentials: %s' % credentials)
         self.save_credentials(user_id, credentials)
 
