@@ -26,7 +26,7 @@ def login_handler():
 @route('/oauth2callback')
 def oauth_callback_handler():
     code = request.query.code
-    OAuthHandler.ins().respond_save_credential(code)
+    OAuthHandler.ins().respond_save_credential(request, code)
     response.content_type = 'text/plain'
     return '''{
     status: OK

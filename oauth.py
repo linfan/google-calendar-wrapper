@@ -46,7 +46,7 @@ class OAuthHandler:
         storage = Storage('credentials-%s.dat' % (user_id))
         storage.put(credentials)
 
-    def respond_save_credential(self, code):
+    def respond_save_credential(self, request, code):
         """Respond to the return code of first step OAuth authorisation"""
         user_id = request.get_cookie('user_id')
         print('>> User ID from cookie: %s' % user_id)
