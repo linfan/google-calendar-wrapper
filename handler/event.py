@@ -19,19 +19,6 @@ def get_calendar_data(credentials):
     print('>> Min-time: %s' % min_time)
     http_request = service.events().list(calendarId='primary', timeMin=min_time, orderBy="startTime", singleEvents=True)
 
-#    page_token = None
-#    while True:
-#        events = service.events().list(calendarId='primary', pageToken=page_token).execute()
-#        for event in events['items']:
-#            output.write(repr(event['start']) + '\n')
-#            output.write(repr(event['summary']) + '\n')
-#            print event['start']
-#            print event['summary']
-#            #print event
-#        page_token = events.get('nextPageToken')
-#        if not page_token:
-#            break
-
     while http_request is not None:
         http_response = http_request.execute()
         for event in http_response.get('items', []):
@@ -48,11 +35,11 @@ def event_list_handler():
     user_id = request.query.user
     credentials = OAuthHandler.ins().get_credentials(user_id)
     if credentials is None or credentials.invalid:
-        response.content_type = 'text/plain'
-        return '''{
-    status: ERROR,
-    detail: User id not exist, URL should look like: http://%s:9999/event/list?user=123
-}''' % Utility.ins().hostname()
+        return {
+            'status': 'ERROR',
+            'detail': 'User id not exist, URL should look like: http://%s:%s/event/list?user=123'
+                      % (Utility.ins().hostname(), Utility.ins().port())
+        }
     try:
         calendar_output = get_calendar_data(credentials)
         response.set_header('Cache-Control', 'no-cache')
@@ -60,7 +47,7 @@ def event_list_handler():
         return calendar_output
     except AccessTokenRefreshError:
         response.content_type = 'text/plain'
-        return '''{
-    status: ERROR,
-    detail: Credential expired, please re-login
-}'''
+        return {
+            'status': 'ERROR',
+            'detail': 'Credential expired, please re-login'
+        }
