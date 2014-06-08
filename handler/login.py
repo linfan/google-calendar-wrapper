@@ -20,7 +20,7 @@ def login_handler():
         response.content_type = 'text/plain'
         return '''{
     status: ERROR,
-    detail: User entered URL should look like: http://%s:9999/login?user=123
+    detail: Missing user id, URL should look like: http://%s:9999/login?user=123
 }''' % Utility.ins().hostname()
 
 @route('/oauth2callback')
