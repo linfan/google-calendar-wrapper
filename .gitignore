@@ -3,6 +3,8 @@ material/*
 cmd/*
 client_secrets.json
 .DS_Store
+nohup.out
+app.log
 
 # generated files
 *.pyc
