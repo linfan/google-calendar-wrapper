@@ -1,16 +1,16 @@
 # user files
-material/*
-cmd/*
-client_secrets.json
-.DS_Store
+**/material
+**/cmd
+**/client_secrets.json
+**/.DS_Store
 
 # generated files
-*.pyc
-*.dat
-.idea/*
+**/*.pyc
+**/*.dat
+**/.idea
 
 # google-api-python-client-gae-library
-uritemplate
-oauth2client
-httplib2
-apiclient
+python/uritemplate
+python/oauth2client
+python/httplib2
+python/apiclient
