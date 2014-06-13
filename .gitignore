@@ -16,3 +16,6 @@ python/uritemplate
 python/oauth2client
 python/httplib2
 python/apiclient
+
+# nodejs external modules
+nodejs/node_modules/
