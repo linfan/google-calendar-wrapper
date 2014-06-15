@@ -24,12 +24,12 @@ function OAuthHandler() {
         console.log('oath2_client: ' + self.oauth2Client);
     });
 
-    var get_oauth_client = function () {
+    var internal_oauth_client = function () {
         return self.oauth2Client;
     }
 
     this.get_oauth_url = function (callback) {
-        util.waitUntilAvailable(get_oauth_client, function() {
+        util.waitUntilAvailable(internal_oauth_client, function() {
             calendar_auth_url = self.oauth2Client.generateAuthUrl({
                 access_type: 'offline',
             //  scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar'
@@ -41,8 +41,22 @@ function OAuthHandler() {
     }
 
     this.get_oauth_token = function (code, callback) {
-        util.waitUntilAvailable(get_oauth_client, function() {
+        util.waitUntilAvailable(internal_oauth_client, function() {
             self.oauth2Client.getToken(code, callback);
+        });
+    }
+
+    function get_oauth_client(callback) {
+        googleapis
+        .discover('calendar', 'v3')
+        .execute(function(err, client){
+            if(!err) {
+                callback(clients);
+                //self.cal = clients.calendar;
+                //self.oauth = clients.oauth2;
+                //self.client = oauth2Client;
+                //self.url = calendar_auth_url;
+            }
         });
     }
 }

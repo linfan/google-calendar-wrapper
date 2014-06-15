@@ -30,11 +30,14 @@ app.get('/', function(req, res) {
 app.get('/login', function(req, res) {
     uid = req.param('user');
     if (uid) {
+        console.log('using uid: ' + uid);
         fs.readFile(path.resolve(__dirname, 'credentials-' + uid + '.dat'), 'utf8', function (err, data) {
             if (err) {
-                console.log('using uid: ' + uid);
                 OAuth.get_oauth_url(function(oauth_rul) {
-                    res.redirect(oauth_rul);
+                    res.json({
+                        status: 'REDIRECT',
+                        redirect: oauth_rul
+                    });
                 });
             } else {
                 res.json({
@@ -70,6 +73,42 @@ app.get('/oauth2callback', function(req, res) {
             });
         }
     });
+});
+
+app.get('/events/list', function(req, res) {
+    uid = req.param('user');
+    if (uid) {
+        console.log('using uid: ' + uid);
+        fs.readFile(path.resolve(__dirname, 'credentials-' + uid + '.dat'), 'utf8', function (err, data) {
+            if (err) {
+                OAuth.get_oauth_url(function(oauth_rul) {
+                    res.json({
+                        status: 'REDIRECT',
+                        redirect: oauth_rul
+                    });
+                });
+            } else {
+                OAuth.get_oauth_client(function(client) {
+                    client.calendar.events.list({
+                        calendarId: primary,
+                        maxResults: 5
+                    })
+                    .withAuthClient(authClient)
+                    .execute(function(err, calendar) {
+                        if (err)
+                            console.log(err);
+                        else
+                            console.log(calendar);
+                    });
+                });
+            }
+        });
+    } else {
+        res.json({
+            status: 'ERROR',
+            detail: 'Missing user-id in request URL, should specify as events/list?user=<id>'
+        });
+    }
 });
 
 var server = app.listen(9999);
