@@ -1,6 +1,7 @@
 var express = require('express'),
     app = express(),
     http = require('http'),
+    fs = require('fs'),
     path = require('path'),
     OAuth = require('./lib/gapi').OAuth;
 
@@ -20,28 +21,54 @@ app.configure(function() {
 });
 
 app.get('/', function(req, res) {
-    
+    res.json({
+        status: 'OK',
+        detail: 'Nothing to show on this page'
+    });
 });
 
 app.get('/login', function(req, res) {
-    OAuth.get_oauth_url(function(oauth_rul) {
-      var locals = {
-            title: 'This is my sample app',
-            url: oauth_rul
-        };
-        res.render('index.jade', locals);
-    });
+    uid = req.param('user');
+    if (uid) {
+        fs.readFile(path.resolve(__dirname, 'credentials-' + uid + '.dat'), 'utf8', function (err, data) {
+            if (err) {
+                console.log('using uid: ' + uid);
+                OAuth.get_oauth_url(function(oauth_rul) {
+                    res.redirect(oauth_rul);
+                });
+            } else {
+                res.json({
+                    status: 'OK',
+                    detail: 'Already logined'
+                });
+            }
+        });
+    } else {
+        res.json({
+            status: 'ERROR',
+            detail: 'Missing user-id in request URL, should specify as login?user=<id>'
+        });
+    }
 });
 
 app.get('/oauth2callback', function(req, res) {
     var code = req.query.code;
     console.log('oauth code: ' + code);
     OAuth.get_oauth_token(code, function(err, tokens){
-        console.log(tokens);
-        var locals = {
-            title: 'What are you doing with yours?'
-        };
-        res.render('index.jade', locals);
+        if (err) {
+            res.json({
+                status: 'ERROR',
+                detail: JSON.stringify(err)
+            });
+        } else {
+            fs.writeFile(path.resolve(__dirname, 'credentials-' + uid + '.dat'), JSON.stringify(tokens), 'utf8', function (err, data) {
+                console.log(tokens);
+                res.json({
+                    status: 'OK',
+                    detail: 'Login succeed'
+                });       
+            });
+        }
     });
 });
 

@@ -7,6 +7,7 @@
 **/app.log
 
 # generated files
+**/*.swp
 **/*.pyc
 **/*.dat
 **/.idea
