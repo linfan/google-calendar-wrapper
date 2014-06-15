@@ -46,16 +46,13 @@ function OAuthHandler() {
         });
     }
 
-    function get_oauth_client(callback) {
+    function get_oauth_client(token, callback) {
         googleapis
         .discover('calendar', 'v3')
         .execute(function(err, client){
             if(!err) {
-                callback(clients);
-                //self.cal = clients.calendar;
-                //self.oauth = clients.oauth2;
-                //self.client = oauth2Client;
-                //self.url = calendar_auth_url;
+                self.oauth2Client.setCredentials(token);
+                callback(client.withAuthClient(self.oauth2Client));
             }
         });
     }

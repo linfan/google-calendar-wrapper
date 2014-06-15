@@ -79,7 +79,7 @@ app.get('/events/list', function(req, res) {
     uid = req.param('user');
     if (uid) {
         console.log('using uid: ' + uid);
-        fs.readFile(path.resolve(__dirname, 'credentials-' + uid + '.dat'), 'utf8', function (err, data) {
+        fs.readFile(path.resolve(__dirname, 'credentials-' + uid + '.dat'), 'utf8', function (err, token) {
             if (err) {
                 OAuth.get_oauth_url(function(oauth_rul) {
                     res.json({
@@ -88,12 +88,11 @@ app.get('/events/list', function(req, res) {
                     });
                 });
             } else {
-                OAuth.get_oauth_client(function(client) {
+                OAuth.get_oauth_client(JSON.parse(token), function(client) {
                     client.calendar.events.list({
-                        calendarId: primary,
+                        calendarId: 'primary',
                         maxResults: 5
                     })
-                    .withAuthClient(authClient)
                     .execute(function(err, calendar) {
                         if (err)
                             console.log(err);
