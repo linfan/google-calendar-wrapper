@@ -88,16 +88,27 @@ app.get('/events/list', function(req, res) {
                     });
                 });
             } else {
-                OAuth.get_oauth_client(JSON.parse(token), function(client) {
+                OAuth.get_oauth_client(JSON.parse(token), function(client, oauth2Client) {
                     client.calendar.events.list({
                         calendarId: 'primary',
-                        maxResults: 5
+                        maxResults: 5,
+                        //timeMin: min_time,
+                        orderBy: 'startTime',
+                        singleEvents: true
                     })
+                    .withAuthClient(oauth2Client)
                     .execute(function(err, calendar) {
-                        if (err)
+                        if (err) {
                             console.log(err);
-                        else
-                            console.log(calendar);
+                            OAuth.get_oauth_url(function(oauth_rul) {
+                                res.json({
+                                    status: 'REDIRECT',
+                                    redirect: oauth_rul
+                                });
+                            });
+                        } else {
+                            res.json(calendar);
+                        }
                     });
                 });
             }
@@ -113,3 +124,4 @@ app.get('/events/list', function(req, res) {
 var server = app.listen(9999);
 
 console.log('Express server started on port %s', server.address().port);
+
