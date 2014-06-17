@@ -19,7 +19,7 @@ function EventsHandler() {
         });
     };
 
-    var get_events_list = function(res) {
+    var get_events_list = function(res, token) {
         OAuth.get_oauth_client(JSON.parse(token), function(client, oauth2Client) {
             client.calendar.events.list({
                 calendarId: 'primary',
@@ -48,7 +48,7 @@ function EventsHandler() {
                 if (err) {
                     error_require_login(res);
                 } else {
-                    get_events_list(res);
+                    get_events_list(res, token);
                 }
             });
         } else {

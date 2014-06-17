@@ -26,4 +26,8 @@ app.get('/oauth2callback', login.oauth2callback);
 app.get('/events/list', events.list);
 
 var server = app.listen(PORT);
-util.log('Express server started on port ' + server.address().port);
+if (server.address() == null) {
+    util.log('There another application using port "' + PORT + '", cannot start up.');
+} else {
+    util.log('Express server started on port ' + server.address().port);
+}

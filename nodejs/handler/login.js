@@ -11,6 +11,7 @@ function LoginHandler() {
                 status: 'REDIRECT',
                 redirect: oauth_rul
             });
+            //res.redirect(oauth_rul);
         });
     };
 
