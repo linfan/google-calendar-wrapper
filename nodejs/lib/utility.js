@@ -1,20 +1,20 @@
 function Utility() {
 
-    function waitUntilAvailable(varGetter, callback, timeout) {
+    this.waitUntilAvailable = function (varGetter, callback, timeout) {
         timeout = timeout || 100;
         if ( varGetter() != null ) {
             callback(varGetter());
         } else {
             setTimeout(function() { waitUntilAvailable(varGetter, callback, timeout); } ,timeout);
         }
-    }
+    };
 
     var DEBUG_MODE = true;
-    function log(str) {
+    this.log = function (info) {
         if (DEBUG_MODE) {
-            console.log(str);
+            console.log(info);
         }
-    }
+    };
 
 }
 

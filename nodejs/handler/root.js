@@ -1,3 +1,5 @@
+var util = require('./lib/utility').Utility;
+
 function RootHandler() {
 
     this.index = function(req, res) {
@@ -5,7 +7,7 @@ function RootHandler() {
             status: 'OK',
             detail: 'Nothing to show on this page'
         });
-    }
+    };
 
 }
 

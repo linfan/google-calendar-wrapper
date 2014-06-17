@@ -1,9 +1,14 @@
+var fs = require('fs'),
+    path = require('path'),
+    util = require('./lib/utility').Utility,
+    OAuth = require('./lib/gapi').OAuth;
+
 function EventsHandler() {
 
     this.list = function(req, res) {
         uid = req.param('user');
         if (uid) {
-            console.log('using uid: ' + uid);
+            util.log('using uid: ' + uid);
             fs.readFile(path.resolve(__dirname, 'credentials-' + uid + '.dat'), 'utf8', function (err, token) {
                 if (err) {
                     OAuth.get_oauth_url(function(oauth_rul) {
@@ -24,7 +29,7 @@ function EventsHandler() {
                         .withAuthClient(oauth2Client)
                         .execute(function(err, calendar) {
                             if (err) {
-                                console.log(err);
+                                util.log(err);
                                 OAuth.get_oauth_url(function(oauth_rul) {
                                     res.json({
                                         status: 'REDIRECT',
@@ -44,7 +49,7 @@ function EventsHandler() {
                 detail: 'Missing user-id in request URL, should specify as events/list?user=<id>'
             });
         }
-    }
+    };
 
 }
 

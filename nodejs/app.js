@@ -1,13 +1,9 @@
 var express = require('express'),
     app = express(),
-    http = require('http'),
-    fs = require('fs'),
-    path = require('path'),
-    util = require('./lib/utility').Utility;
-    OAuth = require('./lib/gapi').OAuth,
-    root = new require(./handler/root).RootHandler,
-    login = new require(./handler/login).LoginHandler,
-    events = new require(./handler/events).EventsHandler;
+    util = require('./lib/utility').Utility,
+    root = new require('./handler/root').RootHandler,
+    login = new require('./handler/login').LoginHandler,
+    events = new require('./handler/events').EventsHandler;
 
 process.env.PORT = 9999;
 
