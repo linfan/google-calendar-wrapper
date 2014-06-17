@@ -1,9 +1,9 @@
 var fs = require('fs'),
     path = require('path'),
-    googleapis = require('googleapis');
-    util = require('./utility');
+    googleapis = require('googleapis'),
+    util = require('./utility').Utility;
 
-function OAuthHandler() {
+function OAuthHelper() {
 
     var OAuth2Client = googleapis.OAuth2Client;
     var self = this;
@@ -32,7 +32,6 @@ function OAuthHandler() {
         util.waitUntilAvailable(internal_oauth_client, function() {
             calendar_auth_url = self.oauth2Client.generateAuthUrl({
                 access_type: 'offline',
-            //  scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar'
                 scope: 'https://www.googleapis.com/auth/calendar.readonly'
             });
             console.log('calendar_auth_url: ' + calendar_auth_url);
@@ -58,5 +57,5 @@ function OAuthHandler() {
     }
 }
 
-var OAuth = new OAuthHandler;
+var OAuth = new OAuthHelper;
 exports.OAuth = OAuth;
