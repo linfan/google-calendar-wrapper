@@ -1,4 +1,4 @@
-var util = require('./lib/utility').Utility;
+var util = require('../lib/utility').Utility;
 
 function RootHandler() {
 

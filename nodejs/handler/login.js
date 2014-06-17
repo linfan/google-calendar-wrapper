@@ -1,9 +1,39 @@
 var fs = require('fs'),
     path = require('path'),
-    util = require('./lib/utility').Utility,
-    OAuth = require('./lib/gapi').OAuth;
+    util = require('../lib/utility').Utility,
+    OAuth = require('../lib/gapi').OAuth;
 
 function LoginHandler() {
+
+    var redirect_oauth_url = function(res) {
+        OAuth.get_oauth_url(function(oauth_rul) {
+            res.json({
+                status: 'REDIRECT',
+                redirect: oauth_rul
+            });
+        });
+    };
+
+    var login_succeed = function(res, info) {
+        res.json({
+            status: 'OK',
+            detail: info
+        });
+    };
+
+    var login_failed = function(res, info) {
+        res.json({
+            status: 'ERROR',
+            detail: info
+        });
+    };
+
+    var error_missing_uid = function(res) {
+        res.json({
+            status: 'ERROR',
+            detail: 'Missing user-id in request URL, should specify as login?user=<id>'
+        });
+    };
 
     this.index = function(req, res) {
         uid = req.param('user');
@@ -11,24 +41,14 @@ function LoginHandler() {
             util.log('using uid: ' + uid);
             fs.readFile(path.resolve(__dirname, 'credentials-' + uid + '.dat'), 'utf8', function (err, data) {
                 if (err) {
-                    OAuth.get_oauth_url(function(oauth_rul) {
-                        res.json({
-                            status: 'REDIRECT',
-                            redirect: oauth_rul
-                        });
-                    });
+                    res.cookie('user_id', uid);
+                    redirect_oauth_url(res);
                 } else {
-                    res.json({
-                        status: 'OK',
-                        detail: 'Already logined'
-                    });
+                    login_succeed(res, 'Already logined');
                 }
             });
         } else {
-            res.json({
-                status: 'ERROR',
-                detail: 'Missing user-id in request URL, should specify as login?user=<id>'
-            });
+            error_missing_uid(res);
         }
     };
 
@@ -37,18 +57,22 @@ function LoginHandler() {
         util.log('oauth code: ' + code);
         OAuth.get_oauth_token(code, function(err, tokens){
             if (err) {
-                res.json({
-                    status: 'ERROR',
-                    detail: JSON.stringify(err)
-                });
+                login_failed(res, JSON.stringify(err))
             } else {
-                fs.writeFile(path.resolve(__dirname, 'credentials-' + uid + '.dat'), JSON.stringify(tokens), 'utf8', function (err, data) {
-                    util.log(tokens);
-                    res.json({
-                        status: 'OK',
-                        detail: 'Login succeed'
-                    });       
-                });
+                var uid = req.cookies.user_id;
+                if (uid) {
+                    fs.writeFile(path.resolve(__dirname, 'credentials-' + uid + '.dat'), JSON.stringify(tokens), 'utf8',
+                        function (err, data) {
+                            if (err) {
+                                login_failed(res, JSON.stringify(err))
+                            } else {
+                                util.log(tokens);
+                                login_succeed(res, 'Login succeed');
+                            }
+                        });
+                } else {
+                    login_failed(res, 'This page should be redirect from /login url')
+                }
             }
         });
     };
