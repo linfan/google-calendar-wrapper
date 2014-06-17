@@ -57,14 +57,16 @@ function LoginHandler() {
         util.log('oauth code: ' + code);
         OAuth.get_oauth_token(code, function(err, tokens){
             if (err) {
-                login_failed(res, JSON.stringify(err))
+                login_failed(res, err)
             } else {
+                util.log('Cookies: ');
+                util.log(req.cookies);
                 var uid = req.cookies.user_id;
                 if (uid) {
                     fs.writeFile(path.resolve(__dirname, 'credentials-' + uid + '.dat'), JSON.stringify(tokens), 'utf8',
                         function (err, data) {
                             if (err) {
-                                login_failed(res, JSON.stringify(err))
+                                login_failed(res, err)
                             } else {
                                 util.log(tokens);
                                 login_succeed(res, 'Login succeed');
