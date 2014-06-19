@@ -1,7 +1,8 @@
 var fs = require('fs'),
     path = require('path'),
     util = require('../lib/utility').Utility,
-    OAuth = require('../lib/gapi').OAuth;
+    OAuth = require('../lib/gapi').OAuth,
+    dateFormat = require('../lib/dateFormat');
 
 function EventsHandler() {
 
@@ -21,10 +22,13 @@ function EventsHandler() {
 
     var get_events_list = function(res, token) {
         OAuth.get_oauth_client(JSON.parse(token), function(client, oauth2Client) {
+            var now = new Date();
+            var min_time = now.format("isoDateTime") + "+08:00";
+            util.log("Min time: " + min_time);
             client.calendar.events.list({
                 calendarId: 'primary',
                 maxResults: 5,
-                //timeMin: min_time,
+                timeMin: min_time,
                 orderBy: 'startTime',
                 singleEvents: true
             })
