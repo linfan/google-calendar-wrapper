@@ -7,11 +7,11 @@ function LoginHandler() {
 
     var redirect_oauth_url = function(res) {
         OAuth.get_oauth_url(function(oauth_rul) {
-            res.json({
-                status: 'REDIRECT',
-                redirect: oauth_rul
-            });
-            //res.redirect(oauth_rul);
+            //res.json({
+            //    status: 'REDIRECT',
+            //    redirect: oauth_rul
+            //});
+            res.redirect(oauth_rul);
         });
     };
 
