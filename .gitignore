@@ -1,16 +1,16 @@
 # user files
 **/material
 **/cmd
+**/credentials
 **/client_secrets.json
 **/.DS_Store
 **/nohup.out
 **/app.log
+**/.idea
 
 # generated files
-**/*.swp
-**/*.pyc
-**/*.dat
-**/.idea
+*.swp
+*.pyc
 
 # google-api-python-client-gae-library
 python/uritemplate
