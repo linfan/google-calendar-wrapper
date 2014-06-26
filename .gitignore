@@ -1,6 +1,7 @@
 # user files
 **/material
 **/cmd
+**/credentials
 **/client_secrets.json
 **/.DS_Store
 **/nohup.out
