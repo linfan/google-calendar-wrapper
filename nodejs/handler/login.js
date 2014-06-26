@@ -40,7 +40,7 @@ function LoginHandler() {
         uid = req.param('user');
         if (uid) {
             util.log('using uid: ' + uid);
-            fs.readFile(path.resolve(__dirname, 'credentials-' + uid + '.dat'), 'utf8', function (err, data) {
+            fs.readFile(path.resolve(__dirname, '../credentials/' + uid + '.dat'), 'utf8', function (err, data) {
                 if (err) {
                     res.cookie('user_id', uid);
                     redirect_oauth_url(res);
@@ -64,7 +64,7 @@ function LoginHandler() {
                 util.log(req.cookies);
                 var uid = req.cookies.user_id;
                 if (uid) {
-                    fs.writeFile(path.resolve(__dirname, 'credentials-' + uid + '.dat'), JSON.stringify(tokens), 'utf8',
+                    fs.writeFile(path.resolve(__dirname, '../credentials/' + uid + '.dat'), JSON.stringify(tokens), 'utf8',
                         function (err, data) {
                             if (err) {
                                 login_failed(res, err)

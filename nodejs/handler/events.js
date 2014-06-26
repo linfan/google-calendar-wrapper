@@ -48,7 +48,7 @@ function EventsHandler() {
         uid = req.param('user');
         if (uid) {
             util.log('using uid: ' + uid);
-            fs.readFile(path.resolve(__dirname, 'credentials-' + uid + '.dat'), 'utf8', function (err, token) {
+            fs.readFile(path.resolve(__dirname, '../credentials/' + uid + '.dat'), 'utf8', function (err, token) {
                 if (err) {
                     error_require_login(res);
                 } else {
