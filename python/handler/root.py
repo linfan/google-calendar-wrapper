@@ -3,7 +3,7 @@ from utility import Utility
 
 @route('/')
 def main_handler():
-    response.content_type = 'text/plain'
+    response.content_type = 'application/json'
     return {
         'status': 'OK',
         'detail': 'Nothing to show on this page, try http://%s:%s/login'

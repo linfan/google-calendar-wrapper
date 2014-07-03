@@ -16,18 +16,25 @@ def get_calendar_data(credentials):
     service = build('calendar', 'v3', http=http)
     min_time = re.sub(r'\.[0-9]*$', '+08:00', datetime.isoformat(datetime.now()))
     print('>> Min-time: %s' % min_time)
-    http_request = service.events().list(calendarId='primary', timeMin=min_time, orderBy="startTime", singleEvents=True)
+    http_request = service.events().list(
+            calendarId='primary',
+            maxResults=5,
+            timeMin=min_time,
+            orderBy='startTime',
+            singleEvents=True)
 
     res = { 'status': 'OK', 'events': [] }
-    while http_request is not None:
-        http_response = http_request.execute()
-        for event in http_response.get('items', []):
-            item = {
-                    'start': event['start'],
-                    'summary': event['summary']
-                }
-            res['events'].append(item)
-        http_request = service.events().list_next(http_request, http_response)
+
+    http_response = http_request.execute()
+    for event in http_response.get('items', []):
+        item = {
+                'summary': event['summary'],
+                'organizer': event['organizer']['displayName'],
+                'location': 'location' in event and event['location'] or 'N/A',
+                'start': 'dateTime' in event['start'] and event['start']['dateTime'] or event['start']['date']+'T00:00:00+08:00',
+                'end': 'dateTime' in event['end'] and event['end']['dateTime'] or event['end']['date']+'T23:59:59+08:00'
+            }
+        res['events'].append(item)
 
     return res
 
@@ -44,10 +51,10 @@ def event_list_handler():
     try:
         calendar_output = get_calendar_data(credentials)
         response.set_header('Cache-Control', 'no-cache')
-        response.set_header('Content-type', 'text/plain')
+        response.set_header('Content-type', 'application/json')
         return calendar_output
     except AccessTokenRefreshError:
-        response.content_type = 'text/plain'
+        response.content_type = 'application/json'
         return {
             'status': 'ERROR',
             'detail': 'Credential expired, please re-login'

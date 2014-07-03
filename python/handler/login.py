@@ -11,13 +11,13 @@ def login_handler():
         if credentials is None or credentials.invalid:
             OAuthHandler.ins().respond_redirect_to_auth_server(response, user_id)
         else:
-            response.content_type = 'text/plain'
+            response.content_type = 'application/json'
             return {
                 'status': 'OK',
                 'detail': 'Already logined'
             }
     else:
-        response.content_type = 'text/plain'
+        response.content_type = 'application/json'
         return {
             'status': 'ERROR',
             'detail': 'Missing user id, URL should look like: http://%s:%s/login?user=123'
@@ -28,7 +28,7 @@ def login_handler():
 def oauth_callback_handler():
     code = request.query.code
     OAuthHandler.ins().respond_save_credential(request, code)
-    response.content_type = 'text/plain'
+    response.content_type = 'application/json'
     return {
         'status': 'OK',
         'detail': 'Login succeed'
