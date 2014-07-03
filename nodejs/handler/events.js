@@ -20,6 +20,25 @@ function EventsHandler() {
         });
     };
 
+    var send_event_struct = function(res, calendar) {
+        var resDatas = { status: 'OK' };
+        var events = [];
+        var eventCount = calendar["items"].length;
+        for (i=0; i<eventCount; i++) {
+            events[i] = { summary: calendar["items"][i]["summary"],
+                        organizer: calendar["items"][i]["organizer"]["displayName"],
+                        location: calendar["items"][i]["location"],
+                        start: calendar["items"][i]["start"]["dateTime"],
+                        end: calendar["items"][i]["end"]["dateTime"]
+            };
+            if (!events[i]["location"]) {
+                events[i]["location"] = "N/A";
+            }
+        }
+        resDatas["events"] = events;
+        res.json(resDatas);
+    }
+
     var get_events_list = function(res, token) {
         OAuth.get_oauth_client(JSON.parse(token), function(client, oauth2Client) {
             var now = new Date();
@@ -38,7 +57,7 @@ function EventsHandler() {
                         util.log(err);
                         error_require_login(res);
                     } else {
-                        res.json(calendar);
+                        send_event_struct(res, calendar);
                     }
                 });
         });
