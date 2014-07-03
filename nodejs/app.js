@@ -23,7 +23,7 @@ app.configure(function() {
 app.get('/', root.index);
 app.get('/login', login.index);
 app.get('/oauth2callback', login.oauth2callback);
-app.get('/events/list', events.list);
+app.get('/event/list', events.list);
 
 var server = app.listen(PORT);
 if (server.address() == null) {

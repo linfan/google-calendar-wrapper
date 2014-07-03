@@ -29,7 +29,7 @@ class OAuthHandler:
 
     def get_credentials(self, user_id):
         """Using the user id as a key, retrieve the credentials."""
-        storage = Storage('credentials-%s.dat' % (user_id))
+        storage = Storage('credentials/%s.dat' % (user_id))
         return storage.get()
 
     def respond_redirect_to_auth_server(self, response, user_id):
@@ -43,7 +43,7 @@ class OAuthHandler:
 
     def save_credentials(self, user_id, credentials):
         """Using the fake user name as a key, save the credentials."""
-        storage = Storage('credentials-%s.dat' % (user_id))
+        storage = Storage('credentials/%s.dat' % (user_id))
         storage.put(credentials)
 
     def respond_save_credential(self, request, code):
