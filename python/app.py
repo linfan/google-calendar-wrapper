@@ -8,6 +8,7 @@ sys.path.append(os.sep.join((os.getcwd(),'handler')))
 import root
 import login
 import event
+import gettime
 
 hostname = Utility.ins().hostname()
 if hostname != '':
