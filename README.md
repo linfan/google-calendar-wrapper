@@ -3,7 +3,7 @@ Google Calendar wrapper
 
 This project is a gooogle calendar API wrapper degigned to support **multi-user login** and provide a easily use way to **retrieval the latest event data** thought a set of hardware friendly **RESTful API**.
 
-![Google Calendar](images/google-calendar.jpg)
+![Google Calendar](.images/google-calendar.jpg)
 
 There are two different implecations of the same functionality.
 
