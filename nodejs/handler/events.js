@@ -36,6 +36,7 @@ function EventsHandler() {
             }
         }
         resDatas["events"] = events;
+        this.lazyData = resDatas;
         res.json(resDatas);
     }
 
@@ -46,7 +47,7 @@ function EventsHandler() {
             util.log("Min time: " + min_time);
             client.calendar.events.list({
                 calendarId: 'primary',
-                maxResults: 5,
+                maxResults: 2,
                 timeMin: min_time,
                 orderBy: 'startTime',
                 singleEvents: true
@@ -65,7 +66,13 @@ function EventsHandler() {
 
     this.list = function(req, res) {
         uid = req.param('user');
-        if (uid) {
+        lazy_mode = req.param('lazy');
+        if (lazy_mode && this.lazyData)
+        {
+            util.log('using lazy mode :P');
+            res.json(this.lazyData);
+        }
+        else if (uid) {
             util.log('using uid: ' + uid);
             fs.readFile(path.resolve(__dirname, '../credentials/' + uid + '.dat'), 'utf8', function (err, token) {
                 if (err) {
