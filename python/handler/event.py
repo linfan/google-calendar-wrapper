@@ -18,7 +18,7 @@ def get_calendar_data(credentials):
     print('>> Min-time: %s' % min_time)
     http_request = service.events().list(
             calendarId='primary',
-            maxResults=5,
+            maxResults=2,
             timeMin=min_time,
             orderBy='startTime',
             singleEvents=True)
