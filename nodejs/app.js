@@ -4,11 +4,13 @@ var express = require('express'),
     Root = require('./handler/root').RootHandler,
     Login = require('./handler/login').LoginHandler,
     Events = require('./handler/events').EventsHandler;
+    Time = require('./handler/time').TimeHandler;
 
 var PORT = 9999,
     root = new Root,
     login = new Login,
-    events = new Events;
+    events = new Events,
+    time = new Time;
 
 app.configure(function() {
     app.set('port', PORT);
@@ -21,6 +23,7 @@ app.configure(function() {
 });
 
 app.get('/', root.index);
+app.get('/time', time.index);
 app.get('/login', login.index);
 app.get('/oauth2callback', login.oauth2callback);
 app.get('/event/list', events.list);
