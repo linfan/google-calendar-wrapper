@@ -26,7 +26,7 @@ function RootHandler() {
     this.events_list = function (req, res) {
         uid = req.param('user');
         type = req.param('type');
-        var url = '/' + type + '/events_list?user=' + uid;
+        var url = '/' + type + '/event_list?user=' + uid;
         res.redirect(url);
     }
 

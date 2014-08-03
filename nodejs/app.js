@@ -19,7 +19,7 @@ var root = require('./modules/root/handler/api').RootHandler;
 app.get('/', root.index);
 app.get('/get', root.get);
 app.get('/login', root.login);
-app.get('/events/list', root.events_list);
+app.get('/event/list', root.events_list);
 
 var time_get = require('./modules/time/handler/get').TimeHandler;
 app.get('/time/get', time_get.index);
