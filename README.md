@@ -28,7 +28,7 @@ Python wrapper (deprecated)
 [Python wrapper is out of maintaining, because the [bottle library](http://bottlepy.org/docs/dev/index.html) is not as stable as expected]
 ### How to use
 1. Install [Python 2.7](http://www.python.org/).
-2. Clone this project and enter python_deprecated folder.
+2. Clone this project and enter python(deprecated) folder.
 3. Install the [Google App Engine SDK for Python](https://developers.google.com/appengine/downloads#Google_App_Engine_SDK_for_Python), unzip all contents at current folder.
 3. Follow step 3-5 of python wrapper.
 4. Run the application: **python app.py**.

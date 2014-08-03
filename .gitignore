@@ -13,10 +13,10 @@
 *.pyc
 
 # google-api-python-client-gae-library
-python_deprecated/uritemplate
-python_deprecated/oauth2client
-python_deprecated/httplib2
-python_deprecated/apiclient
+python(deprecated)/uritemplate
+python(deprecated)/oauth2client
+python(deprecated)/httplib2
+python(deprecated)/apiclient
 
 # nodejs external modules
 nodejs/node_modules/
