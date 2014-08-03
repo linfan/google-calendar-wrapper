@@ -65,8 +65,8 @@ function EventsHandler() {
     };
 
     this.list = function(req, res) {
-        uid = req.param('user');
-        lazy_mode = req.param('lazy');
+        var uid = req.param('user');
+        var lazy_mode = req.param('lazy');
         if (lazy_mode && this.lazyData)
         {
             util.log('using lazy mode :P');

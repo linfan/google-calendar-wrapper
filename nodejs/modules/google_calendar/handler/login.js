@@ -37,7 +37,7 @@ function LoginHandler() {
     };
 
     this.index = function(req, res) {
-        uid = req.param('user');
+        var uid = req.param('user');
         if (uid) {
             util.log('using uid: ' + uid);
             fs.readFile(path.resolve(__dirname, '../credentials/' + uid + '.dat'), 'utf8', function (err, data) {
