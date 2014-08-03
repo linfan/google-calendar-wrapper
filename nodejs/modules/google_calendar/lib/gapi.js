@@ -1,7 +1,7 @@
 var fs = require('fs'),
     path = require('path'),
     googleapis = require('googleapis'),
-    util = require('./utility').Utility;
+    util = require('../../public/lib/utility').Utility;
 
 function OAuthHelper() {
 

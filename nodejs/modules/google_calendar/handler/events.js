@@ -1,8 +1,8 @@
 var fs = require('fs'),
     path = require('path'),
-    util = require('../lib/utility').Utility,
+    util = require('../../public/lib/utility').Utility,
     OAuth = require('../lib/gapi').OAuth,
-    dateFormat = require('../lib/dateFormat');
+    dateFormat = require('../../public/lib/dateFormat');
 
 function EventsHandler() {
 
@@ -88,4 +88,4 @@ function EventsHandler() {
 
 }
 
-exports.EventsHandler = EventsHandler;
+exports.EventsHandler = new EventsHandler;

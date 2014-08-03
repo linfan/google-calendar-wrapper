@@ -1,4 +1,4 @@
-var dateFormat = require('../lib/dateFormat');
+var dateFormat = require('../../public/lib/dateFormat');
 
 function TimeHandler() {
     this.index = function(req, res) {
@@ -11,4 +11,4 @@ function TimeHandler() {
     }
 }
 
-exports.TimeHandler = TimeHandler;
+exports.TimeHandler = new TimeHandler;

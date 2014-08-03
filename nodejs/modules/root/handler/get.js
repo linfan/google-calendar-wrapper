@@ -1,4 +1,4 @@
-var util = require('../lib/utility').Utility;
+var util = require('../../public/lib/utility').Utility;
 
 function RootHandler() {
 
@@ -11,4 +11,4 @@ function RootHandler() {
 
 }
 
-exports.RootHandler = RootHandler;
+exports.RootHandler = new RootHandler;

@@ -1,6 +1,6 @@
 var fs = require('fs'),
     path = require('path'),
-    util = require('../lib/utility').Utility,
+    util = require('../../public/lib/utility').Utility,
     OAuth = require('../lib/gapi').OAuth;
 
 function LoginHandler() {
@@ -81,4 +81,4 @@ function LoginHandler() {
     };
 }
 
-exports.LoginHandler = LoginHandler;
+exports.LoginHandler = new LoginHandler;
