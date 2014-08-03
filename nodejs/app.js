@@ -1,4 +1,5 @@
 var express = require('express'),
+    util = require('./modules/public/lib/utility').Utility,
     app = express();
 
 var PORT = 9999;
@@ -14,8 +15,11 @@ app.configure(function() {
 
 // -- Add more handler here -->
 
-var root = require('./modules/root/handler/get').RootHandler;
+var root = require('./modules/root/handler/api').RootHandler;
 app.get('/', root.index);
+app.get('/get', root.get);
+app.get('/login', root.login);
+app.get('/events/list', root.events_list);
 
 var time_get = require('./modules/time/handler/get').TimeHandler;
 app.get('/time/get', time_get.index);
@@ -29,7 +33,6 @@ app.get('/google_calendar/event_list', google_calendar_events.list);
 // <-- Add more handler here --
 
 var server = app.listen(PORT);
-var util = require('./modules/public/lib/utility').Utility;
 if (server.address() == null) {
     util.log('There another application using port "' + PORT + '", cannot start up.');
 } else {

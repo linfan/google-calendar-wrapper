@@ -12,19 +12,22 @@ function RootHandler() {
     this.get = function (req, res) {
         var uid = req.param('user');
         var type = req.param('type');
-        var url = util.hostname() + ':' + util.port() + '/' + type + '/get?user=' + uid;
-        util.log('>> API Rediect to: ' + url);
-//        res.redirect(url);
+        var url = '/' + type + '/get?user=' + uid;
+        res.redirect(url);
     }
 
     this.login = function (req, res) {
         uid = req.param('user');
         type = req.param('type');
+        var url = '/' + type + '/login?user=' + uid;
+        res.redirect(url);
     }
 
-    this.event_list = function (req, res) {
+    this.events_list = function (req, res) {
         uid = req.param('user');
         type = req.param('type');
+        var url = '/' + type + '/events_list?user=' + uid;
+        res.redirect(url);
     }
 
 }
